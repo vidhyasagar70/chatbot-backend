@@ -5,7 +5,11 @@ const userSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, enum: ["admin", "staff member", "customer"], required: true },
+    role: {
+        type: String,
+        enum: ["admin", "staff member", "customer"],
+        required: true,
+    },
 });
 exports.default = (0, mongoose_1.model)("User", userSchema);
 //# sourceMappingURL=User.js.map

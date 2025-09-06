@@ -5,7 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const diamondController_1 = require("../controllers/diamondController");
+const auth_1 = require("../middleware/auth");
 const router = express_1.default.Router();
+router.use(auth_1.authenticate);
 router.get("/", diamondController_1.getDiamonds);
 router.get("/stats", diamondController_1.getInventoryStats);
 router.get("/sku/:sku", diamondController_1.getDiamondBySku);
