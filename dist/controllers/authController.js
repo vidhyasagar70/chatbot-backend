@@ -24,7 +24,19 @@ const register = async (req, res) => {
         const hashedPassword = await bcryptjs_1.default.hash(password, 10);
         const user = new User_1.default({ name, email, password: hashedPassword, role });
         await user.save();
-        return res.status(201).json({ message: "User registered successfully." });
+        const token = jsonwebtoken_1.default.sign({ userId: user._id, role: user.role }, JWT_SECRET, {
+            expiresIn: "1d",
+        });
+        return res.status(201).json({
+            message: "User registered successfully.",
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            },
+        });
     }
     catch (err) {
         return res.status(500).json({ message: "Server error." });
@@ -50,11 +62,14 @@ const login = async (req, res) => {
         const token = jsonwebtoken_1.default.sign({ userId: user._id, role: user.role }, JWT_SECRET, {
             expiresIn: "1d",
         });
-        return res
-            .status(200)
-            .json({
+        return res.status(200).json({
             token,
-            user: { name: user.name, email: user.email, role: user.role },
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            },
         });
     }
     catch (err) {

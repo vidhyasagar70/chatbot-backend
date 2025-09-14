@@ -140,8 +140,16 @@ const getDiamondBySku = async (req, res) => {
 exports.getDiamondBySku = getDiamondBySku;
 const createDiamond = async (req, res) => {
     try {
+        if (!req.user || !req.user.userId) {
+            res.status(401).json({
+                success: false,
+                message: "User not authenticated",
+            });
+            return;
+        }
         const diamondData = {
             ...req.body,
+            createdBy: req.user.userId,
             sku: req.body.sku?.toUpperCase(),
         };
         const existingSku = await Diamond_1.Diamond.findOne({ sku: diamondData.sku });
